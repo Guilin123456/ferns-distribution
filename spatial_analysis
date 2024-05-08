@@ -78,7 +78,6 @@ write.csv(splm, paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/new_clima
 
 }
 ######################
-i <- 3
 for(i in 3:4){
   s <- data2[[i]]
   nb <- poly2nb(s, queen=TRUE)
