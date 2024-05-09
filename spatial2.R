@@ -1,11 +1,11 @@
-#############################  moran and spatial autocorrelation analysis
+#############################   moran and spatial autocorrelation analysis
 library(spdep)
 library(spaMM)
 library(RSpectra)
 library(dplyr)
-net <- c(50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000) ####### 只做100*100km格子的LRT分析，其它的分析时间太长了
-m <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MS.rate_", net[2], ".RDS"))
-n <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MRD_DR_BAMM_", net[2], ".RDS"))
+
+m <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MS.rate_100000.RDS"))
+n <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MRD_DR_BAMM_100000.RDS"))
 
 m1 <- filter(m, !is.na(MAT))
 n1 <- filter(n, !is.na(MAT))
