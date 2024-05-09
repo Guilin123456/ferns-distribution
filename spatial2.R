@@ -1,8 +1,58 @@
+#############################  moran and spatial autocorrelation analysis
+library(spdep)
+library(spaMM)
+library(RSpectra)
+library(dplyr)
+net <- c(50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000) ####### 只做100*100km格子的LRT分析，其它的分析时间太长了
+m <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MS.rate_", net[2], ".RDS"))
+n <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MRD_DR_BAMM_", net[2], ".RDS"))
+
+m1 <- filter(m, !is.na(MAT))
+n1 <- filter(n, !is.na(MAT))
+
+blackcap<- st_drop_geometry(m1)  
+blackcap.1<- st_drop_geometry(n1)  
+
+############################################ set MAP and MAT bins
+MS.rate.LRT<- blackcap
+MS.rate.LRT$group.MAT <- as.numeric(cut(MS.rate.LRT$MAT, breaks = c(min(MS.rate.LRT$MAT)-1, seq(-2, 25, by=3), max(MS.rate.LRT$MAT)+1)))###加一点使其包括所有数据
+MS.rate.LRT$group.MAP <- as.numeric(cut(MS.rate.LRT$MAP, breaks = c(min(MS.rate.LRT$MAP)-1, seq(300, 2700, by=300), max(MS.rate.LRT$MAP)+1)))
+
+st_geometry(MS.rate.LRT)<- st_geometry(m1) 
+#####
+MRD.rate.LRT<- blackcap.1########
+MRD.rate.LRT$group.MAT <- as.numeric(cut(MRD.rate.LRT$MAT, breaks = c(min(MRD.rate.LRT$MAT)-1, seq(-2, 25, by=3), max(MRD.rate.LRT$MAT)+1)))###加一点使其包括所有数据
+MRD.rate.LRT$group.MAP <- as.numeric(cut(MRD.rate.LRT$MAP, breaks = c(min(MRD.rate.LRT$MAP)-1, seq(300, 2700, by=300), max(MRD.rate.LRT$MAP)+1)))
+
+st_geometry(MRD.rate.LRT)<- st_geometry(n1) 
+################################### estimate mean MAT and MAP value to each climate zone
+MS.MAT<- aggregate(MS.rate.LRT$MAT, by=list(MS.rate.LRT$group.MAT), mean)
+MS.MAP<- aggregate(MS.rate.LRT$MAP, by=list(MS.rate.LRT$group.MAP), mean)
+
+MRD.MAT<- aggregate(MRD.rate.LRT$MAT, by=list(MRD.rate.LRT$group.MAT), mean)
+MRD.MAP<- aggregate(MRD.rate.LRT$MAP, by=list(MRD.rate.LRT$group.MAP), mean)
+
+colnames(MS.MAT) <- c("group.MAT", "climate")
+colnames(MS.MAP) <- c("group.MAP", "climate")
+
+colnames(MRD.MAT) <- c("group.MAT", "climate")
+colnames(MRD.MAP) <- c("group.MAP", "climate")
+################################### merge grid cells of each climate zones
+MS.rate.LRT.MAT <- MS.rate.LRT %>% group_by(group.MAT) %>% summarize(geometry = st_union(geometry)) %>% ungroup()####按照group.MAT进行合并
+MS.rate.LRT.MAP <- MS.rate.LRT %>% group_by(group.MAP) %>% summarize(geometry = st_union(geometry))####按照group.MAP进行合并
+
+MRD.rate.LRT.MAT <- MRD.rate.LRT %>% group_by(group.MAT) %>% summarize(geometry = st_union(geometry))####按照group.MAT进行合并
+MRD.rate.LRT.MAP <- MRD.rate.LRT %>% group_by(group.MAP) %>% summarize(geometry = st_union(geometry))####按照group.MAP进行合并
+
+data2 <- list(MS.rate.LRT.MAT, MS.rate.LRT.MAP, MRD.rate.LRT.MAT, MRD.rate.LRT.MAP)
+######################################################################
+################################### spatial analysis
 library(spatialreg)
 library(sf)
 library(spdep)
 library(RColorBrewer)
-#################################
+################################# moran analysis
+
 data2 <- readRDS("E:/文章/Fern2/写作2024.04.11.nitta_new_map/new_climate_bin_spatial/climate.bin.spatial.RDS")
 
 clim <- c("MAT", "MAP", "MAT", "MAP")
@@ -40,7 +90,8 @@ for(i in 1:2){
   
   write.csv(moran.results, paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/new_climate_bin_spatial/MS_moran_", clim[i] ,".csv"))
   
-  ###############################################################################
+###############################################################################
+##############################################################spatial autocorrelation
   
   
   splm1 <- spautolm(MS_richness ~ climate, data=s,
@@ -150,5 +201,7 @@ for(i in 3:4){
   
 }
 ##################
+
+
 
 
