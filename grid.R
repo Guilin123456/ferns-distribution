@@ -1,5 +1,4 @@
 library("ggplot2")
-theme_set(theme_bw())
 library("sf")
 library("rnaturalearth")
 library("rnaturalearthdata")
@@ -8,7 +7,7 @@ library("rnaturalearthhires")
 world <- ne_countries(scale = "large", returnclass = "sf")%>% st_set_crs(.,4326)#####高分辨率地图
 world_sf1 <- world
 world_sf1%>%st_transform(.,"+proj=cea +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs")->world_sf5
-
+theme_set(theme_bw())
 ##########################get the grid net
 net <- c(50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000)
 
