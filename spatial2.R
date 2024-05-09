@@ -150,8 +150,18 @@ for(i in 3:4){
   
 }
 
-library("ape")
+library("usethis")
+use_git_config(user.name="Guilin123456", user.email="guilin.tropical@gmail.com")
+edit_git_config()
+use_git()
 
+create_github_token()
+
+library(gitcreds)
+gitcreds_set()
+
+
+use_github()
 ############################################
 
 install.packages("gitcreds")
