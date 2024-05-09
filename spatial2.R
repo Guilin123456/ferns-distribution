@@ -149,5 +149,6 @@ for(i in 3:4){
   write.csv(splm, paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/new_climate_bin_spatial/MRD_spatial_", clim[i] ,".csv"))
   
 }
+##################
 
 
