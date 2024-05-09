@@ -160,7 +160,7 @@ create_github_token()
 library(gitcreds)
 gitcreds_set()
 
-
+use_git()
 use_github()
 ############################################
 
