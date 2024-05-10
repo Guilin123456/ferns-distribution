@@ -146,7 +146,6 @@ tree[[2]] <- read.tree("E:/文章/Fern2/data_support/leptosporangiates.tre")
 tree[[3]] <- read.tree("E:/文章/Fern2/data_support/cathetogyrates.tre")
 tree[[4]] <- read.tree("E:/文章/Fern2/data_support/eupolypods.tre")
 
-
 MAP.tree <- list()
 MAT.tree <- list()
 for(i in 1:4){
