@@ -13,8 +13,6 @@ BM.MAP <- fitContinuous(tree2, MAP.tree, model="BM")
 OU.MAP <- fitContinuous(tree2, MAP.tree, model="OU")
 LA.MAP <- fitContinuous(tree2, MAP.tree, model="lambda")
 
-sig <- c(phylosig(tree2, MAP.tree, method="lambda",test=TRUE)$lambda, phylosig(tree2, MAP.tree, method="lambda",test=TRUE)$P)
-sig.MAP <- rbind(sig.MAP, sig)
 ################################################################
 
 OU1tree.MAP<-rescale(tree2,model='OU',alpha=OU.MAP$opt$alpha)
@@ -48,11 +46,9 @@ if (which.min(MAP.rec.f.1=="LA")){ best.MAP.ace <- LA1rec.MAP$ace
 }                            
 
 brtime <- branching.times(tree2)
-
 ACE.MAP <- cbind(brtime, best.MAP.ace)
 ACE <- as.data.frame(ACE.MAP)
 colnames(ACE) <- c("brtime", "V2")
-
 
 time.MAP<- c(max(ACE[ACE$V2 < (300), ]$brtime),
              max(ACE[ACE$V2 < (600)& ACE$V2 >=(300), ]$brtime),
