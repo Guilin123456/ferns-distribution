@@ -1,8 +1,6 @@
 #############################   moran and spatial autocorrelation analysis
 #############################
 #############################
-
-
 library(spdep)
 library(spaMM)
 library(RSpectra)
