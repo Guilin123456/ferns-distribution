@@ -186,7 +186,7 @@ library(dplyr)
 library(purrr)
 
 bins <- function (x, var){
-  map(x, ~.x %>% filter(row.names(.) %in% var))%>% #######在list里面选取行
+  purrr::map(x, ~.x %>% filter(row.names(.) %in% var))%>% #######在list里面选取行
     bind_rows(.id = "clades") %>% ####### list行合并
     mutate(clades = rep(c("ferns", "leptosporangiates", "cathetogyrates", "eupolypods"), each=length(var)))%>%
     mutate(variable=rep(var,times=4))%>%
