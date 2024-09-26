@@ -30,8 +30,8 @@ grid_MATP <- function(side_length){
     mutate(AREA=st_area(.))%>%
     dplyr::rename(., geometry = .)
   ##################################################
-  MAT.chel<- terra::rast(paste("Chelsa_climate/CHELSA_bio1_1981-2010_V.2.1.tif", sep=""))####not need *0.1-273.15
-  MAP.chel<- terra::rast(paste("Chelsa_climate/CHELSA_bio12_1981-2010_V.2.1.tif", sep=""))
+  MAT.chel<- terra::rast(paste("E:/文章/Fern2/ferns-distribution/manuscript/To_NEE/Chelsa_climate/CHELSA_bio1_1981-2010_V.2.1.tif", sep=""))####not need *0.1-273.15
+  MAP.chel<- terra::rast(paste("E:/文章/Fern2/ferns-distribution/manuscript/To_NEE/Chelsa_climate/CHELSA_bio12_1981-2010_V.2.1.tif", sep=""))
   #######
   fishnet_1<- fishnet %>% st_transform(.,"+proj=longlat +datum=WGS84 +no_defs +type=crs")###
   fishnet_2 <- fishnet_1 %>% mutate(MAT= exact_extract(MAT.chel, fishnet_1, 'mean'), 
@@ -39,8 +39,8 @@ grid_MATP <- function(side_length){
                                     MAT_sd= exact_extract(MAT.chel, fishnet_1, 'stdev'),
                                     MAP_sd= exact_extract(MAP.chel, fishnet_1, 'stdev'))
   ######################################################
-  Points <- read.csv("distribution.f.csv", header=T) %>% 
-    dplyr::select(Gridcell_ID, Accepted_binomial, decimalLatitude,decimalLongitude, genus, Family)%>% 
+  Points <- read.csv("E:/文章/Fern2/ferns-distribution/manuscript/To_NEE/Data S2.csv", header=T) %>% 
+    dplyr::select(Accepted_binomial, decimalLatitude,decimalLongitude, genus, Family)%>% 
     dplyr::rename(., species = Accepted_binomial, family = Family,long=decimalLongitude, lat=decimalLatitude)%>%
     st_as_sf(., coords = c(x = "long", y = "lat"))%>%st_set_crs(., 4326)
   ##################################################################
@@ -55,3 +55,5 @@ grid_MATP <- function(side_length){
 }
 
 ##################################
+climate_grid <- grid_MATP(100000)
+

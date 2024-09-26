@@ -9,7 +9,7 @@ library(phytools)
 library("evomap")
 library("ape")
 ################
-tree <- read.tree("all_5582.tre")
+tree <- read.tree("E:/文章/Fern2/ferns-distribution/manuscript/To_NEE/Data S1.tre")
 tree$node.label <- c(length(tree$tip.label)+1):(2*length(tree$tip.label)-1)
 clades <- c("ferns", "leptosporangiates", "cathetogyrates", "eupolypods")
 ##############################
@@ -26,11 +26,11 @@ mvBM_ace_MAT <- list()
 tree_mvBM.MAP<- list()
 mvBM_ace_MAP <- list()
 ###################################
-data <- grid_MATP(100000)[[3]]#### from grid function climatic data extracted from 100km*100km grid
+data <- climate_grid[[3]]#### from grid function climatic data extracted from 100km*100km grid
 
 for(i in 1:4){
   
-  sub <- read.csv(paste("clades/", clades[i], ".csv", sep=""), header=T) 
+  sub <- read.csv(paste("E:/文章/Fern2/ferns-distribution/manuscript/To_NEE/clades/", clades[i], ".csv", sep=""), header=T) 
   all_distribution <- filter(data, family %in% (sub$family)) ###"Equisetaceae"
   
   sub.tree <- drop.tip(tree, tree$tip.label[!tree$tip.label%in% (unique(all_distribution$species))])%>%
@@ -134,7 +134,7 @@ for(i in 1:5){
 }
 
 best_model <- best.model.MATP%>% 
-  mutate(clades = rep(c("ferns", "leptosporangiates", "cathetogyrates", "eupolypods", "fern-eupolypods"), each=4))%>%
+  mutate(clades = rep(c("ferns", "leptosporangiates", "cathetogyrates", "eupolypods"), each=4))%>%
   select(clades, model, aic.x, lnL.x, aic.y, lnL.y)%>%
   dplyr::rename(., aic_MAT = aic.x, lnL_MAT = lnL.x, aic_MAP = aic.y, lnL_MAP = lnL.y)
 #################
