@@ -61,7 +61,11 @@ occurance_richness <- list()
 f <- NULL
 
 for(i in 1:8){
+<<<<<<< HEAD
   haha <-  grid_MATP(net[i])[[2]]
+=======
+  haha <- grid_MATP(net[i])[[2]]
+>>>>>>> 6b89d0bbd30452c5c9e3b4d9b0164087d5552ca3
   
   
   occurance_richness[[i]] <-list(haha %>%group_by(grid_id) %>% 
