@@ -7,10 +7,14 @@ library(data.table)
 library(spatialreg)
 library(spdep)
 
+bin_shap_MAT <- readRDS("E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/bin_shap_MAT.RDS")
+bin_shap_MAP <- readRDS("E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/bin_shap_MAP.RDS")
+MAT_data_total <- readRDS("E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/MAT_data_total.RDS")
+MAP_data_total <- readRDS("E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/MAP_data_total.RDS")
 
-################################# Moran and spatial for bin3
+################################# Moran and spatial for bin3；Table S2-S3
 
-var_MAT <- c("MAT", "rate_0_region", "rate_0.5_region", "rate_0.9_region","MRD_region", "BAMM_region")
+var_MAT <- c("MAT", "rate_0_region", "rate_0.5_region", "rate_0.9_region","MRD_region")
 var_MAP <- c("MAP",var_MAT[-1])
 ###################
 
@@ -29,7 +33,7 @@ MATP_spatial <- function(bin_shap, climat_data, var){
 }
 ##################
 spatial_total<- NULL
-for(i in 1:6){
+for(i in 1:5){
   spatial_total <- rbind(spatial_total, c(MATP_spatial(bin_shap_MAT[[3]][[1]], MAT_data_total[[3]][[1]], var_MAT[i]), ######## MAT_data_total from the former 
                                           MATP_spatial(bin_shap_MAP[[3]][[1]], MAP_data_total[[3]][[1]], var_MAP[i])  ) )
 }
@@ -38,16 +42,16 @@ spatial_auto <-  spatial_total%>%data.frame()%>%dplyr::select(V3,V4,Likelihood.r
   dplyr::rename(., Log_full_MAT = V3, Log_NULL_MAT = V4, P.affect_MAT = Likelihood.ratio, P.spatial_MAT=V6,
                 Log_full_MAP = V11, Log_NULL_MAP = V12, P.affect_MAP = Likelihood.ratio.1, P.spatial_MAP=V14)%>%
   `rownames<-`( c("richness~climate","richness~rate_0", "richness~rate_0.5", "richness~rate_0.9", 
-                  "richness~MRD", "richness~BAMM") )
+                  "richness~MRD") )
 ########################################################################
 spatial_moran <-  spatial_total%>%data.frame()%>%dplyr::select(V1,V2,V9,V10)%>%
   dplyr::rename(., I_MAT = V1, P_MAT = V2, I_MAP = V9, P_MAP = V10)%>%
   rbind(c(spatial_total[1,7],spatial_total[1,8],spatial_total[1,15], spatial_total[1,16]))%>%
   `rownames<-`( c("climate","rate_0", "rate_0.5", "rate_0.9", 
-                  "MRD", "BAMM","richness") )
+                  "MRD","richness") )
 ########################################################################
 ########################################################################
-########################################################################for all variables
+########################################################################for all variables： Table 1;  Table 2; Table 3; Data S3
 ########################################################################
 
 ####################
@@ -73,18 +77,19 @@ MATP_spatial_1 <-  function(bin_shap, climat_data, var2, var3){
 spatial_MAT<- replicate(5, rep(list(NULL), 4), simplify = FALSE)
 spatial_MAP<- replicate(5, rep(list(NULL), 4), simplify = FALSE)
 
+
 for(j in 1:5){
   for(i in 1:4) {
     
-    MAT_data_total[[j]][[i]]<- MAT_data_total[[j]][[i]]%>%na.omit()
-    bin_shap_MAT[[j]][[i]] <- bin_shap_MAT[[j]][[i]]%>% dplyr::filter(group.MAT%in%MAT_data_total[[j]][[i]][,1])
+    MAT_data_total_1<- MAT_data_total[[j]][[i]]%>%na.omit()
+    bin_shap_MAT_1 <- bin_shap_MAT[[j]][[i]]%>% dplyr::filter(group.MAT%in%MAT_data_total_1[,1])
     
     
     spatial_MAT[[j]][[i]] <- do.call("rbind", list(MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"region_richnes_ALL",  "rate_0_region"), 
                                                    MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"region_richnes_ALL",  "rate_0.5_region"),
                                                    MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"region_richnes_ALL",  "rate_0.9_region"),
                                                    MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"region_richnes_ALL",  "MRD_region"),
-                                                   MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"region_richnes_ALL",  "brtime_final"),
+                                                   MATP_spatial_1(bin_shap_MAT_1, MAT_data_total_1,"region_richnes_ALL",  "brtime_final"),
                                                    MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"rate_0_region",  "MAT_rate"),
                                                    MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"rate_0.5_region",  "MAT_rate"),
                                                    MATP_spatial_1(bin_shap_MAT[[j]][[i]], MAT_data_total[[j]][[i]],"rate_0.9_region",  "MAT_rate"),
@@ -96,14 +101,14 @@ for(j in 1:5){
       dplyr::select(r2non_spatial, Pnon_spatial, Pspatial, positive_MAT)
     
     ##############
-    MAP_data_total[[j]][[i]]<- MAP_data_total[[j]][[i]]%>%na.omit()
-    bin_shap_MAP[[j]][[i]] <- bin_shap_MAP[[j]][[i]]%>% dplyr::filter(group.MAP%in%MAP_data_total[[j]][[i]][,1])
+    MAP_data_total_1<- MAP_data_total[[j]][[i]]%>%na.omit()
+    bin_shap_MAP_1 <- bin_shap_MAP[[j]][[i]]%>% dplyr::filter(group.MAP%in%MAP_data_total_1[,1])
     
     spatial_MAP[[j]][[i]] <- do.call("rbind", list(MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"region_richnes_ALL",  "rate_0_region"), 
                                                    MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"region_richnes_ALL",  "rate_0.5_region"),
                                                    MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"region_richnes_ALL",  "rate_0.9_region"),
                                                    MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"region_richnes_ALL",  "MRD_region"),
-                                                   MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"region_richnes_ALL",  "brtime_final"),
+                                                   MATP_spatial_1(bin_shap_MAP_1, MAP_data_total_1,"region_richnes_ALL",  "brtime_final"),
                                                    MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"rate_0_region",  "MAP_rate"),
                                                    MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"rate_0.5_region",  "MAP_rate"),
                                                    MATP_spatial_1(bin_shap_MAP[[j]][[i]], MAP_data_total[[j]][[i]],"rate_0.9_region",  "MAP_rate"),
@@ -151,8 +156,4 @@ for(i in 1:5) {
 
 
 
-saveRDS(bin_shap_MAT, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/bin_shap_MAT.RDS")
-saveRDS(bin_shap_MAP, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/bin_shap_MAP.RDS")
-saveRDS(MAT_data_total, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/MAT_data_total.RDS")
-saveRDS(MAP_data_total, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/MAP_data_total.RDS")
 

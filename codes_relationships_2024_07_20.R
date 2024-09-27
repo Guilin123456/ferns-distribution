@@ -164,3 +164,7 @@ for(j in 1:5){
 
 ############################################
 ############################################
+saveRDS(bin_shap_MAT, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/bin_shap_MAT.RDS")
+saveRDS(bin_shap_MAP, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/bin_shap_MAP.RDS")
+saveRDS(MAT_data_total, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/MAT_data_total.RDS")
+saveRDS(MAP_data_total, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/MAP_data_total.RDS")

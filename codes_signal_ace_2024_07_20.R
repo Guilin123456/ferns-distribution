@@ -125,9 +125,14 @@ for(i in 1:4){
   mvBM_ace_MAT[[i]] <- ace(MAT,tree_mvBM.MAT[[i]],method="REML") # get ancestral estimates using mvBM tree
 
 } 
+##################################
+saveRDS(best.MAT.ace, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/best.MAT.ace.RDS")
+saveRDS(best.MAP.ace, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/best.MAP.ace.RDS")
+saveRDS(mvBM_ace_MAT, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/mvBM_ace_MAT.RDS")
+saveRDS(mvBM_ace_MAP, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/spatial_RDS/mvBM_ace_MAP.RDS")
 
-#############
-############################best model aic table
+##################################
+############################best model aic: table S5
 best.model.MATP <- NULL
 for(i in 1:5){
   best.model.MATP <-rbind(best.model.MATP, full_join(best.model.MAT[[i]], best.model.MAP[[i]], by="model"))
@@ -137,5 +142,7 @@ best_model <- best.model.MATP%>%
   mutate(clades = rep(c("ferns", "leptosporangiates", "cathetogyrates", "eupolypods"), each=4))%>%
   select(clades, model, aic.x, lnL.x, aic.y, lnL.y)%>%
   dplyr::rename(., aic_MAT = aic.x, lnL_MAT = lnL.x, aic_MAP = aic.y, lnL_MAP = lnL.y)
-#################
 
+##################################
+#################phylogenetic signal: table S6
+write.csv(MATP.signal, "E:/文章/Fern2/ferns-distribution/manuscript/joel_2024_09_20/MATP_signal.csv", row.names = F)
