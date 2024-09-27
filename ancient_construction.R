@@ -1,9 +1,9 @@
 ############################# BM,OU,LA,WN construction
 tree<- list()
-tree[[1]] <- read.tree("E:/文章/Fern2/data_support/Ferns.tre")
-tree[[2]] <- read.tree("E:/文章/Fern2/data_support/leptosporangiates.tre")
-tree[[3]] <- read.tree("E:/文章/Fern2/data_support/cathetogyrates.tre")
-tree[[4]] <- read.tree("E:/文章/Fern2/data_support/eupolypods.tre")
+tree[[1]] <- read.tree("E:/文章/Fern2/before/data_support/Ferns.tre")
+tree[[2]] <- read.tree("E:/文章/Fern2/before/data_support/leptosporangiates.tre")
+tree[[3]] <- read.tree("E:/文章/Fern2/before/data_support/cathetogyrates.tre")
+tree[[4]] <- read.tree("E:/文章/Fern2/before/data_support/eupolypods.tre")
 ###################
 for(i in 1:4){
 tree1 <- tree[[i]]

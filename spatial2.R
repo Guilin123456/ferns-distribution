@@ -6,8 +6,8 @@ library(spaMM)
 library(RSpectra)
 library(dplyr)
 
-m <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MS.rate_100000.RDS"))
-n <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MRD_DR_BAMM_100000.RDS"))
+m <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MS.rate_1e+05.RDS"))
+n <- readRDS(paste0("E:/文章/Fern2/写作2024.04.11.nitta_new_map/moren_analysis/moran_MRD_DR_BAMM_1e+05.RDS"))
 
 m1 <- filter(m, !is.na(MAT))
 n1 <- filter(n, !is.na(MAT))
